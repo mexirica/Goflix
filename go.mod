@@ -10,4 +10,5 @@ require (
 require (
 	github.com/go-kit/log v0.2.0 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 )

@@ -5,12 +5,10 @@ import (
 	"os"
 )
 
-// VideoService defines the video streaming service interface
 type VideoService interface {
 	StreamVideo(filename string) (io.ReadCloser, error)
 }
 
-// videoService is an implementation of VideoService
 type videoService struct{}
 
 func NewVideoService() VideoService {
@@ -18,7 +16,7 @@ func NewVideoService() VideoService {
 }
 
 func (s *videoService) StreamVideo(filename string) (io.ReadCloser, error) {
-	filePath := "videos/" + filename + ".mp4"
+	filePath := os.Getenv("MEDIA_PATH") + filename + ".mp4"
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err

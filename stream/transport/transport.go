@@ -12,13 +12,11 @@ import (
 	"github.com/mexirica/goflix/stream/endpoint"
 )
 
-// decodeStreamVideoRequest decodes the request from HTTP to the endpoint format
 func decodeStreamVideoRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	filename := chi.URLParam(r, "filename")
 	return endpoint.StreamVideoRequest{Filename: filename}, nil
 }
 
-// encodeStreamVideoResponse encodes the response from the endpoint to HTTP
 func encodeStreamVideoResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	resp := response.(*endpoint.StreamVideoResponse)
 	if resp.Err != nil {
@@ -28,11 +26,12 @@ func encodeStreamVideoResponse(ctx context.Context, w http.ResponseWriter, respo
 
 	defer resp.File.Close()
 	w.Header().Set("Content-Type", "video/mp4")
+	w.Header().Set("Content-Disposition", "inline")
+
 	io.Copy(w, resp.File)
 	return nil
 }
 
-// MakeHandler returns an HTTP handler that makes use of the endpoints
 func MakeHandler(s service.VideoService) http.Handler {
 
 	streamHandler := httptransport.NewServer(
